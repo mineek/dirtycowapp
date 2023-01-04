@@ -366,7 +366,7 @@ void overwriteFile(NSData *data, NSString *path) {
         g_arg_target_file_path = [path UTF8String];
         // save the data to a temp file
         NSString *model_path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"pwned"];
-        [data writeToFile:model_path atomically:YES];
+        [data writeToFile:model_path atomically:NO];
         g_arg_overwrite_file_path = [model_path UTF8String];
         unaligned_copy_switch_race();
     });
