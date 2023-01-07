@@ -197,7 +197,18 @@ while true {
     */
 
     struct tweakData: Codable {
-        let tweaks: [tweak]
+        let tweaks: [jsonTweak]
+    }
+
+    struct jsonTweak: Codable {
+        let name: String
+        let description: String
+        let actions: [jsonAction]
+    }
+
+    struct jsonAction: Codable {
+        let file: String
+        let data: String
     }
 
     func runJSONTweak(_ tweak: String) {
@@ -213,12 +224,12 @@ while true {
                 return
             }
             // find the tweak
-            for tweak in tweakData.tweaks {
-                if tweak.name == tweak {
+            for jsonTweak in tweakData.tweaks {
+                if jsonTweak.name == tweak {
                     // run the tweak
-                    for action in tweak.actions {
-                        let file = action.file
-                        let data = Data(base64Encoded: action.data)!
+                    for jsonAction in jsonTweak.actions {
+                        let file = jsonAction.file
+                        let data = Data(base64Encoded: jsonAction.data)!
                         self.overwriteFile(data, file)
                     }
                 }
@@ -240,8 +251,8 @@ while true {
                 return
             }
             // add the tweaks to the tweak list
-            for tweak in tweakData.tweaks {
-                self.tweaks.append(tweak(name: tweak.name, description: tweak.description, action: tweak.name, danger: false))
+            for jsonTweak in tweakData.tweaks {
+                self.tweaks.append(tweak(name: jsonTweak.name, description: jsonTweak.description, action: jsonTweak.name, danger: false))
             }
         }
         task.resume()
