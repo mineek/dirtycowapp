@@ -190,7 +190,19 @@ while true {
                         "file": "file to replace",
                         "data": "base64 encoded data"
                     }
-                ]
+                ],
+                "actionType": "replace" // replace, keyedit
+            },
+            {
+                "name": "Tweak name keyedit",
+                "description": "Tweak description",
+                "actions": [
+                    {
+                        "file": "file to edit",
+                        "data": "key to edit:value it becomes"
+                    }
+                ],
+                "actionType": "keyedit" // replace, keyedit
             }
         ]
     }
@@ -204,6 +216,7 @@ while true {
         let name: String
         let description: String
         let actions: [jsonAction]
+        let actionType: String
     }
 
     struct jsonAction: Codable {
@@ -229,8 +242,19 @@ while true {
                     // run the tweak
                     for jsonAction in jsonTweak.actions {
                         let file = jsonAction.file
-                        let data = Data(base64Encoded: jsonAction.data)!
-                        overwriteFile(data, file)
+                        /*let data = Data(base64Encoded: jsonAction.data)!
+                        overwriteFile(data, file)*/
+                        switch jsonTweak.actionType {
+                        case "replace":
+                            let data = Data(base64Encoded: jsonAction.data)!
+                            overwriteFile(data, file)
+                        case "keyedit":
+                            let key = jsonAction.data.components(separatedBy: ":")[0]
+                            let value = jsonAction.data.components(separatedBy: ":")[1]
+                            stringsChange(stringsPath: file, key: key, value: value)
+                        default:
+                            print("Invalid action type")
+                        }
                     }
                 }
             }

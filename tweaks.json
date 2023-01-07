@@ -1,9 +1,3 @@
 {
-    "tweaks": [
-        {
-            "name": "Testing",
-            "description": "Doesn't do anything, I'm just testing tweaks in JSON format",
-            "actions": []
-        }
-    ]
+    "tweaks": []
 }
