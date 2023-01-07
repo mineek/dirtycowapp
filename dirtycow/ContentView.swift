@@ -101,22 +101,20 @@ while true {
         let stringsData = try! Data(contentsOf: URL(fileURLWithPath: plistPath))
         // convert to plist
         let plist = try! PropertyListSerialization.propertyList(from: stringsData, options: [], format: nil) as! [String: Any]
-        // keep going through sub-dictionaries until we find the key, then change the value
-        var newPlist = plist
-        for (k, v) in plist {
-            if k == key {
-                newPlist[k] = value
-            }
-            else if v is [String: Any] {
-                var subDict = v as! [String: Any]
-                for (k2, v2) in subDict {
-                    if k2 == key {
-                        subDict[k2] = value
-                    }
+        func changeValue(_ dict: [String: Any], _ key: String, _ value: String) -> [String: Any] {
+            var newDict = dict
+            for (k, v) in dict {
+                if k == key {
+                    newDict[k] = value
+                } else if let subDict = v as? [String: Any] {
+                    newDict[k] = changeValue(subDict, key, value)
                 }
-                newPlist[k] = subDict
             }
+            return newDict
         }
+        // change value
+        var newPlist = plist
+        newPlist = changeValue(newPlist, key, value)
         // convert back to data
         let newData = try! PropertyListSerialization.data(fromPropertyList: newPlist, format: .binary, options: 0)
         // write to file
