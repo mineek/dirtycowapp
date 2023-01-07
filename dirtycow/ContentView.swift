@@ -90,6 +90,7 @@ while true {
                 UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
             }))
             UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
+            jsonTweaksInit()
         }
     }
 
@@ -166,7 +167,7 @@ while true {
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
         default:
-            print("Invalid tweak")
+            runJSONTweak(tweak)
         }
     }
 
@@ -178,6 +179,69 @@ while true {
         tweak(name: "Hide home bar", description: "Hide home bar", action: "hidehomebarbg", danger: false),
         tweak(name: "Custom 'No SIM' carrier", description: "Custom 'No SIM' carrier", action: "nosimcarriercustom", danger: false),
     ]
+    /*
+    {
+        "tweaks": [
+            {
+                "name": "Tweak name",
+                "description": "Tweak description",
+                "actions": [
+                    {
+                        "file": "file to replace",
+                        "data": "base64 encoded data"
+                    }
+                ]
+            }
+        ]
+    }
+    */
+
+    func runJSONTweak(_ tweak: String) {
+        // get the JSON file
+        let url = URL(string: "https://raw.githubusercontent.com/mineek/dirtycowapp/main/tweaks.json")!
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data else {
+                print("Error: No data to decode")
+                return
+            }
+            guard let tweakData = try? JSONDecoder().decode(tweakData.self, from: data) else {
+                print("Error: Couldn't decode data into tweakData")
+                return
+            }
+            // find the tweak
+            for tweak in tweakData.tweaks {
+                if tweak.name == tweak {
+                    // run the tweak
+                    for action in tweak.actions {
+                        let file = action.file
+                        let data = Data(base64Encoded: action.data)!
+                        self.overwriteFile(data, file)
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
+
+    func jsonTweaksInit() {
+        // get the JSON file
+        let url = URL(string: "https://raw.githubusercontent.com/mineek/dirtycowapp/main/tweaks.json")!
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data else {
+                print("Error: No data to decode")
+                return
+            }
+            guard let tweakData = try? JSONDecoder().decode(tweakData.self, from: data) else {
+                print("Error: Couldn't decode data into tweakData")
+                return
+            }
+            // add the tweaks to the tweak list
+            for tweak in tweakData.tweaks {
+                self.tweaks.append(tweak(name: tweak.name, description: tweak.description, action: tweak.name, danger: false))
+            }
+        }
+        task.resume()
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
