@@ -263,7 +263,7 @@ while true {
                         case "keyedit":
                             let key = jsonAction.data.components(separatedBy: ":")[0]
                             let value = jsonAction.data.components(separatedBy: ":")[1]
-                            stringsChange(stringsPath: file, key: key, value: value)
+                            plistChange(plistPath: file, key: key, value: value)
                         default:
                             print("Invalid action type")
                         }
