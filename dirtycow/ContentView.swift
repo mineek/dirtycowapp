@@ -172,7 +172,7 @@ while true {
     }
 
     // tweak list
-    let tweaks = [
+    var tweaks = [
         tweak(name: "Silent keyboard", description: "Make keyboard silent", action: "keyswap", danger: false),
         tweak(name: "Hide dock", description: "Hide dock", action: "hidedock", danger: false),
         tweak(name: "Hide folder background", description: "Hide folder background", action: "hidefolderbg", danger: false),
@@ -230,7 +230,7 @@ while true {
                     for jsonAction in jsonTweak.actions {
                         let file = jsonAction.file
                         let data = Data(base64Encoded: jsonAction.data)!
-                        self.overwriteFile(data, file)
+                        overwriteFile(data, file)
                     }
                 }
             }
