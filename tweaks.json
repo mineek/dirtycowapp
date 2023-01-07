@@ -1,3 +1,15 @@
 {
-    "tweaks": []
+    "tweaks": [
+        {
+            "name": "Dynamic Island ( iOS 16 only )",
+            "description": "Enable dynamic island",
+            "actions": [
+                {
+                    "file": "/var/containers/Shared/SystemGroup/systemgroup.com.apple.mobilegestaltcache/Library/Caches/com.apple.MobileGestalt.plist",
+                    "data": "ArtworkDeviceSubType:2556"
+                }
+            ],
+            "actionType": "keyedit"
+        }
+    ]
 }

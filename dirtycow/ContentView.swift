@@ -98,17 +98,29 @@ while true {
     // plistChange: Replace a single value in a plist
     // all use void overwriteFile(NSData *data, NSString *path); - DirtyCow
     func plistChange(plistPath: String, key: String, value: String) {
-        // read plist as data
-        let plistData = try! Data(contentsOf: URL(fileURLWithPath: plistPath))
+        let stringsData = try! Data(contentsOf: URL(fileURLWithPath: stringsPath))
         // convert to plist
-        let plist = try! PropertyListSerialization.propertyList(from: plistData, options: [], format: nil) as! [String: Any]
-        // change value
+        let plist = try! PropertyListSerialization.propertyList(from: stringsData, options: [], format: nil) as! [String: Any]
+        // keep going through sub-dictionaries until we find the key, then change the value
         var newPlist = plist
-        newPlist[key] = value
+        for (k, v) in plist {
+            if k == key {
+                newPlist[k] = value
+            }
+            else if v is [String: Any] {
+                var subDict = v as! [String: Any]
+                for (k2, v2) in subDict {
+                    if k2 == key {
+                        subDict[k2] = value
+                    }
+                }
+                newPlist[k] = subDict
+            }
+        }
         // convert back to data
-        let newData = try! PropertyListSerialization.data(fromPropertyList: newPlist, format: .xml, options: 0)
+        let newData = try! PropertyListSerialization.data(fromPropertyList: newPlist, format: .binary, options: 0)
         // write to file
-        overwriteFile(newData, plistPath)
+        overwriteFile(newData, stringsPath)
     }
 
     func stringsChange(stringsPath: String, key: String, value: String) {
