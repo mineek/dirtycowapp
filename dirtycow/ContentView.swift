@@ -157,7 +157,7 @@ while true {
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { action in
                 let text = alert.textFields![0].text!
                 if text.count == 6 {
-                    self.stringsChange(stringsPath: "/System/Library/PrivateFrameworks/SystemStatusServer.framework/en_GB.lproj/SystemStatusServer-Telephony.strings", key: "NO_SIM", value: text)
+                    stringsChange(stringsPath: "/System/Library/PrivateFrameworks/SystemStatusServer.framework/en_GB.lproj/SystemStatusServer-Telephony.strings", key: "NO_SIM", value: text)
                 } else {
                     let alert = UIAlertController(title: "Invalid string", message: "The string must be 6 characters long.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -252,7 +252,7 @@ while true {
             }
             // add the tweaks to the tweak list
             for jsonTweak in tweakData.tweaks {
-                self.tweaks.append(tweak(name: jsonTweak.name, description: jsonTweak.description, action: jsonTweak.name, danger: false))
+                tweaks.append(tweak(name: jsonTweak.name, description: jsonTweak.description, action: jsonTweak.name, danger: false))
             }
         }
         task.resume()
