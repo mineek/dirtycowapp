@@ -116,7 +116,7 @@ while true {
         var newPlist = plist
         newPlist = changeValue(newPlist, key, value)
         // convert back to data
-        let newData = try! PropertyListSerialization.data(fromPropertyList: newPlist, format: .binary, options: 0)
+        let newData = try! PropertyListSerialization.data(fromPropertyList: newPlist, format: .xml, options: 0)
         // write to file
         overwriteFile(newData, plistPath)
     }
