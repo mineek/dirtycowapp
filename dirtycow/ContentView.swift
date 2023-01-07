@@ -196,6 +196,10 @@ while true {
     }
     */
 
+    struct tweakData: Codable {
+        let tweaks: [tweak]
+    }
+
     func runJSONTweak(_ tweak: String) {
         // get the JSON file
         let url = URL(string: "https://raw.githubusercontent.com/mineek/dirtycowapp/main/tweaks.json")!
